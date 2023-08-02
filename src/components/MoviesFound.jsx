@@ -1,3 +1,5 @@
+import React from 'react'
+
 const MoviesFound = ({ value }) => {
   return (
     <p className='num-results'>
