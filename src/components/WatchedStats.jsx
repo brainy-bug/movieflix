@@ -1,7 +1,7 @@
 import React from "react";
 
 const average = (arr) =>
-  arr.reduce((acc, cur, i, arr) => acc + cur / arr.length, 0);
+  arr.reduce((acc, cur, i, arr) => acc + cur / arr.length, 0).toFixed(2)
 
 const WatchedStats = ({ watchedMovies }) => {
   const avgImdbRating = average(watchedMovies.map((movie) => movie.imdbRating));
@@ -14,7 +14,7 @@ const WatchedStats = ({ watchedMovies }) => {
       <div>
         <p>
           <span>#️⃣</span>
-          <span>{watchedMovies.length} movies</span>
+          <span>{watchedMovies.length} movie(s)</span>
         </p>
         <p>
           <span>⭐️</span>

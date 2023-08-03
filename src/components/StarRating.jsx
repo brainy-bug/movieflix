@@ -31,9 +31,9 @@ const StarRating = ({
     fontSize: `${size / 2.5}px`,
   };
 
-  const handleRating = () => {
-    setRating((rating) => (rating === i + 1 ? 0 : i + 1));
-    onSetRating(rating);
+  const handleRating = (r) => {
+    setRating(r);
+    onSetRating(r);
   };
 
   return (
@@ -43,7 +43,7 @@ const StarRating = ({
           return (
             <Star
               key={i + 1}
-              handleRating={handleRating}
+              onRate={() => handleRating(i + 1)}
               handleHoverIn={() => setTempRating(i + 1)}
               handleHoverOut={() => setTempRating(0)}
               full={tempRating ? tempRating >= i + 1 : rating >= i + 1}
@@ -73,7 +73,7 @@ StarRating.propTypes = {
 };
 
 const Star = ({
-  handleRating,
+  onRate,
   full,
   handleHoverIn,
   handleHoverOut,
@@ -91,7 +91,7 @@ const Star = ({
     <span
       role='button'
       style={starStyle}
-      onClick={handleRating}
+      onClick={onRate}
       onMouseEnter={handleHoverIn}
       onMouseLeave={handleHoverOut}
     >

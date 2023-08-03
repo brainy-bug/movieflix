@@ -5,10 +5,11 @@ import Loader from "./Loader";
 import No_Image_Available from "../assets/No_Image_Available.png";
 import ErrorMessage from "./ErrorMessage";
 
-const MovieDetails = ({ id, closeSelectedMovie }) => {
+const MovieDetails = ({ id, closeSelectedMovie, addWatchedMovie }) => {
   const [movie, setMovie] = useState({});
   const [isLoading, setIsLoading] = useState(false);
-  const [errorMsg, setErrorMsg] = useState("");
+  const [errorMsg, setErrorMsg] = useState(null);
+  const [userRating, setUserRating] = useState("");
 
   const {
     Title: title,
@@ -23,10 +24,25 @@ const MovieDetails = ({ id, closeSelectedMovie }) => {
     Genre: genre,
   } = movie;
 
+  const handleAddWatchedMovie = () => {
+    const newWatchedMovie = {
+      imdbID: id,
+      title,
+      year,
+      poster,
+      imdbRating: Number(imdbRating),
+      runtime: Number(runtime.split(" ").at(0)),
+      userRating,
+    };
+
+    addWatchedMovie(newWatchedMovie);
+    closeSelectedMovie();
+  };
+
   useEffect(() => {
     const getMovieDetails = async () => {
       setIsLoading(true);
-      setErrorMsg("");
+      setErrorMsg(null);
       try {
         const res = await fetch(
           `http://www.omdbapi.com/?apikey=${
@@ -45,7 +61,7 @@ const MovieDetails = ({ id, closeSelectedMovie }) => {
     };
 
     getMovieDetails();
-  }, []);
+  }, [id]);
 
   return (
     <>
@@ -75,7 +91,16 @@ const MovieDetails = ({ id, closeSelectedMovie }) => {
           </header>
           <section>
             <div className='rating'>
-              <StarRating size={36} maxRating={10} />
+              <StarRating
+                size={36}
+                maxRating={10}
+                onSetRating={setUserRating}
+              />
+              {userRating > 0 && (
+                <button className='btn-add' onClick={handleAddWatchedMovie}>
+                  + Add to list
+                </button>
+              )}
             </div>
             <p>
               <em>{plot}</em>

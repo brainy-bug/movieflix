@@ -21,7 +21,7 @@ export default function App() {
   const [query, setQuery] = useState("inception");
   const [isLoading, setIsLoading] = useState(false);
   const [movies, setMovies] = useState([]);
-  const [watched, setWatched] = useState([]);
+  const [watchedMovie, setWatchedMovie] = useState([]);
   const [errorMsg, setErrorMsg] = useState("");
   const [selectedId, setSelectedId] = useState(null);
 
@@ -29,6 +29,10 @@ export default function App() {
     setSelectedId(id === selectedId ? null : id);
 
   const closeSelectedMovie = () => setSelectedId(null);
+
+  const addWatchedMovie = (movie) => {
+    setWatchedMovie([...watchedMovie, movie]);
+  };
 
   const reset = () => {
     setIsLoading(true);
@@ -92,14 +96,17 @@ export default function App() {
         <Box>
           {selectedId ? (
             <MovieDetails
-              key={selectedId}
               id={selectedId}
               closeSelectedMovie={closeSelectedMovie}
+              addWatchedMovie={addWatchedMovie}
             />
           ) : (
             <>
-              <WatchedStats watchedMovies={watched} />
-              <WatchedMovieList data={watched} />
+              <WatchedStats watchedMovies={watchedMovie} />
+              <WatchedMovieList
+                data={watchedMovie}
+                setSelectedId={setSelectedId}
+              />
             </>
           )}
         </Box>
