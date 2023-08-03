@@ -5,11 +5,17 @@ import Loader from "./Loader";
 import No_Image_Available from "../assets/No_Image_Available.png";
 import ErrorMessage from "./ErrorMessage";
 
-const MovieDetails = ({ id, closeSelectedMovie, addWatchedMovie }) => {
+const MovieDetails = ({
+  id,
+  closeSelectedMovie,
+  addWatchedMovie,
+  watchedMovies,
+  deleteWatchedMovies,
+}) => {
   const [movie, setMovie] = useState({});
   const [isLoading, setIsLoading] = useState(false);
   const [errorMsg, setErrorMsg] = useState(null);
-  const [userRating, setUserRating] = useState("");
+  const [userRating, setUserRating] = useState(0);
 
   const {
     Title: title,
@@ -39,6 +45,17 @@ const MovieDetails = ({ id, closeSelectedMovie, addWatchedMovie }) => {
     closeSelectedMovie();
   };
 
+  const delWatchedMovie = () => {
+    deleteWatchedMovies(id);
+    closeSelectedMovie();
+  };
+
+  const isWatched = watchedMovies.map((movie) => movie.imdbID).includes(id);
+
+  const watchedUserRating = watchedMovies.find(
+    (movie) => movie.imdbID === id
+  )?.userRating;
+
   useEffect(() => {
     const getMovieDetails = async () => {
       setIsLoading(true);
@@ -54,7 +71,7 @@ const MovieDetails = ({ id, closeSelectedMovie, addWatchedMovie }) => {
         setMovie(data);
       } catch (error) {
         console.log(error);
-        setErrorMsg("Whoops! Something went wrong, try reloading.");
+        setErrorMsg("Whoops! check your internet connection.");
       } finally {
         setIsLoading(false);
       }
@@ -62,6 +79,11 @@ const MovieDetails = ({ id, closeSelectedMovie, addWatchedMovie }) => {
 
     getMovieDetails();
   }, [id]);
+
+  useEffect(() => {
+    if (!title) return;
+    document.title = `${title} - MovieFlix`;
+  }, [title]);
 
   return (
     <>
@@ -95,10 +117,17 @@ const MovieDetails = ({ id, closeSelectedMovie, addWatchedMovie }) => {
                 size={36}
                 maxRating={10}
                 onSetRating={setUserRating}
+                defaultRating={watchedUserRating}
               />
-              {userRating > 0 && (
+              {userRating > 0 && !isWatched && (
                 <button className='btn-add' onClick={handleAddWatchedMovie}>
                   + Add to list
+                </button>
+              )}
+
+              {isWatched && (
+                <button className='btn-del' onClick={delWatchedMovie}>
+                  Remove from list
                 </button>
               )}
             </div>

@@ -12,16 +12,11 @@ import Loader from "./components/Loader";
 import ErrorMessage from "./components/ErrorMessage";
 import MovieDetails from "./components/MovieDetails";
 
-import { tempWatchedData, tempMovieData } from "./data";
-
-const average = (arr) =>
-  arr.reduce((acc, cur, i, arr) => acc + cur / arr.length, 0);
-
 export default function App() {
-  const [query, setQuery] = useState("inception");
+  const [query, setQuery] = useState("spider");
   const [isLoading, setIsLoading] = useState(false);
   const [movies, setMovies] = useState([]);
-  const [watchedMovie, setWatchedMovie] = useState([]);
+  const [watchedMovies, setWatchedMovies] = useState([]);
   const [errorMsg, setErrorMsg] = useState("");
   const [selectedId, setSelectedId] = useState(null);
 
@@ -31,7 +26,13 @@ export default function App() {
   const closeSelectedMovie = () => setSelectedId(null);
 
   const addWatchedMovie = (movie) => {
-    setWatchedMovie([...watchedMovie, movie]);
+    setWatchedMovies([...watchedMovies, movie]);
+  };
+
+  const deleteWatchedMovies = (id) => {
+    setWatchedMovies(watchedMovies.filter(
+      (movie) => movie.imdbID !== id
+    ));
   };
 
   const reset = () => {
@@ -74,6 +75,8 @@ export default function App() {
     fetchMovies();
   }, [query]);
 
+
+
   return (
     <>
       <Navbar>
@@ -99,12 +102,14 @@ export default function App() {
               id={selectedId}
               closeSelectedMovie={closeSelectedMovie}
               addWatchedMovie={addWatchedMovie}
+              watchedMovies={watchedMovies}
+              deleteWatchedMovies={deleteWatchedMovies}
             />
           ) : (
             <>
-              <WatchedStats watchedMovies={watchedMovie} />
+              <WatchedStats watchedMovies={watchedMovies} />
               <WatchedMovieList
-                data={watchedMovie}
+                data={watchedMovies}
                 setSelectedId={setSelectedId}
               />
             </>

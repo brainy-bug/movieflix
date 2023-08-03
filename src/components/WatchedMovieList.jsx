@@ -1,10 +1,9 @@
 import React from "react";
 
-// import MovieRating from "./MovieRating";
 
 const WatchedMovieList = ({ data, setSelectedId }) => {
   return (
-    <ul className='list list-watched'>
+    <ul className='list list-movies list-watched'>
       {data.map((movie) => (
         <li key={movie.imdbID} onClick={() => setSelectedId(movie.imdbID)}>
           <img src={movie.poster} alt={`${movie.title} poster`} />

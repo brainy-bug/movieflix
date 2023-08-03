@@ -7,7 +7,7 @@
   --color-background-500: #2b3035;
   --color-background-900: #212529;
   --color-red: #fa5252;
-  --color-red-dark: #e03131;
+  --color-red-dark: #db1a1a;
 }
 
 * {
@@ -58,8 +58,8 @@ body {
   position: relative;
 }
 
-.box::-webkit-scrollbar{
-    display: none;
+.box::-webkit-scrollbar {
+  display: none;
 }
 
 .loader {
@@ -145,8 +145,8 @@ body {
   overflow: scroll;
 }
 
-.list::-webkit-scrollbar{
-    display: none;
+.list::-webkit-scrollbar {
+  display: none;
 }
 
 .list-watched {
@@ -206,7 +206,7 @@ body {
   border: none;
   background-color: var(--color-red);
   color: var(--color-background-900);
-  font-size: 0.9rem;
+  font-size: 1.2rem;
   font-weight: bold;
   cursor: pointer;
   transition: all 0.3s;
@@ -234,7 +234,7 @@ body {
 .summary div {
   display: flex;
   align-items: center;
-  gap: 1.3rem;
+  gap: 1.5rem;
   font-size: 1.6rem;
   font-weight: 600;
 }
@@ -299,8 +299,16 @@ body {
   gap: 2.4rem;
 }
 
+.btn-del {
+  background-color: var(--color-red-dark);
+}
+
 .btn-add {
   background-color: var(--color-primary);
+}
+
+.btn-add,
+.btn-del {
   color: var(--color-text);
   border: none;
   border-radius: 10rem;
@@ -313,6 +321,10 @@ body {
 
 .btn-add:hover {
   background-color: var(--color-primary-light);
+}
+
+.btn-del:hover {
+  background-color:var(--color-red);
 }
 
 .seconds {
