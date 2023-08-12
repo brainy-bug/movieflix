@@ -7,13 +7,12 @@ import MovieList from "./components/MovieList";
 import MoviesFound from "./components/MoviesFound";
 import Navbar from "./components/Navbar";
 import WatchedStats from "./components/WatchedStats";
-import StarRating from "./components/StarRating";
 import Loader from "./components/Loader";
 import ErrorMessage from "./components/ErrorMessage";
 import MovieDetails from "./components/MovieDetails";
 
 export default function App() {
-  const [query, setQuery] = useState("spider");
+  const [query, setQuery] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [movies, setMovies] = useState([]);
   const [watchedMovies, setWatchedMovies] = useState([]);
@@ -30,9 +29,7 @@ export default function App() {
   };
 
   const deleteWatchedMovies = (id) => {
-    setWatchedMovies(watchedMovies.filter(
-      (movie) => movie.imdbID !== id
-    ));
+    setWatchedMovies(watchedMovies.filter((movie) => movie.imdbID !== id));
   };
 
   const reset = () => {
@@ -43,6 +40,8 @@ export default function App() {
   };
 
   useEffect(() => {
+    const controller = new AbortController();
+
     const fetchMovies = async () => {
       reset();
 
@@ -50,7 +49,8 @@ export default function App() {
         const res = await fetch(
           `http://www.omdbapi.com/?apikey=${
             import.meta.env.VITE_API_KEY
-          }&s=${query}`
+          }&s=${query}`,
+          { signal: controller.signal }
         );
 
         if (!res.ok)
@@ -60,7 +60,7 @@ export default function App() {
         if (data.Response === "False") throw new Error("Movie not found");
         setMovies(() => data.Search);
       } catch (error) {
-        setErrorMsg(error.message);
+        if (error.name !== "AbortError") setErrorMsg(error.message);
       } finally {
         setIsLoading(false);
       }
@@ -73,9 +73,9 @@ export default function App() {
     }
 
     fetchMovies();
+
+    return () => controller.abort();
   }, [query]);
-
-
 
   return (
     <>

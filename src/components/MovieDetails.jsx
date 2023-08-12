@@ -50,12 +50,17 @@ const MovieDetails = ({
     closeSelectedMovie();
   };
 
+  const handleEscapeKey = (event) => {
+    if (event.key === "Escape") closeSelectedMovie();
+  };
+
   const isWatched = watchedMovies.map((movie) => movie.imdbID).includes(id);
 
   const watchedUserRating = watchedMovies.find(
     (movie) => movie.imdbID === id
   )?.userRating;
 
+  // Data Fetching effect
   useEffect(() => {
     const getMovieDetails = async () => {
       setIsLoading(true);
@@ -80,10 +85,23 @@ const MovieDetails = ({
     getMovieDetails();
   }, [id]);
 
+  // Document title effect
   useEffect(() => {
     if (!title) return;
     document.title = `${title} - MovieFlix`;
+
+    return () => (document.title = "Home - MovieFlix");
   }, [title]);
+
+
+  // Event listener effect
+  useEffect(() => {
+    document.addEventListener("keydown", handleEscapeKey);
+
+    return () => {
+      document.removeEventListener("keydown", handleEscapeKey);
+    };
+  }, []);
 
   return (
     <>
