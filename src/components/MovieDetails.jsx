@@ -102,6 +102,7 @@ const MovieDetails = ({
       document.removeEventListener("keydown", handleEscapeKey);
     };
   }, []);
+  
 
   return (
     <>

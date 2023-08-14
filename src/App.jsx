@@ -15,7 +15,9 @@ export default function App() {
   const [query, setQuery] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [movies, setMovies] = useState([]);
-  const [watchedMovies, setWatchedMovies] = useState([]);
+  const [watchedMovies, setWatchedMovies] = useState(() =>
+    JSON.parse(localStorage.getItem("watched-movies"))
+  );
   const [errorMsg, setErrorMsg] = useState("");
   const [selectedId, setSelectedId] = useState(null);
 
@@ -39,6 +41,7 @@ export default function App() {
     setSelectedId(null);
   };
 
+  // Data Fetching effect
   useEffect(() => {
     const controller = new AbortController();
 
@@ -66,7 +69,7 @@ export default function App() {
       }
     };
 
-    if (query.length < 3) {
+    if (query.length === 0) {
       setMovies([]);
       setErrorMsg("");
       return;
@@ -76,6 +79,11 @@ export default function App() {
 
     return () => controller.abort();
   }, [query]);
+
+  // local storage effect
+  useEffect(() => {
+    localStorage.setItem("watched-movies", JSON.stringify(watchedMovies));
+  }, [watchedMovies]);
 
   return (
     <>
@@ -90,6 +98,9 @@ export default function App() {
       <div className='main'>
         <Box>
           {isLoading && <Loader />}
+          {!isLoading && !errorMsg && movies.length === 0 && (
+            <p className='msg'>Start searching for your favorite movie 🎬🍿</p>
+          )}
           {!isLoading && !errorMsg && (
             <MovieList data={movies} openSelectedMovie={openSelectedMovie} />
           )}

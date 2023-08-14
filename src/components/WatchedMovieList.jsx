@@ -1,6 +1,5 @@
 import React from "react";
 
-
 const WatchedMovieList = ({ data, setSelectedId }) => {
   return (
     <ul className='list list-movies list-watched'>
