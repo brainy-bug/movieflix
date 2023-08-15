@@ -2,9 +2,11 @@ import React, { useRef, useEffect } from "react";
 
 const SearchBar = ({ query, handleQuery }) => {
   const inputEl = useRef(null);
-  
+
   useEffect(() => {
     const callback = (e) => {
+      if(document.activeElement === inputEl.current) return;
+  
       if (e.code === "Enter") inputEl.current.focus();
     };
 
