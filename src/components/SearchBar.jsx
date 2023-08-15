@@ -1,6 +1,18 @@
-import React from 'react'
+import React, { useRef, useEffect } from "react";
 
 const SearchBar = ({ query, handleQuery }) => {
+  const inputEl = useRef(null);
+  
+  useEffect(() => {
+    const callback = (e) => {
+      if (e.code === "Enter") inputEl.current.focus();
+    };
+
+    document.addEventListener("keydown", callback);
+
+    return () => document.removeEventListener("keydown", callback);
+  }, []);
+
   return (
     <input
       className='search'
@@ -8,6 +20,7 @@ const SearchBar = ({ query, handleQuery }) => {
       placeholder='Search movies...'
       value={query}
       onChange={handleQuery}
+      ref={inputEl}
     />
   );
 };

@@ -1,10 +1,23 @@
-import React from "react";
+import React, { useEffect, useRef } from "react";
 
-const WatchedMovieList = ({ data, setSelectedId }) => {
+const WatchedMovieList = ({ data, openSelectedMovie, deleteWatchedMovie }) => {
+  const movieEl = useRef(null);
+
+  const handleClick = (e) => {
+    if (e.target.className === "btn-delete")
+      deleteWatchedMovie(e.target.closest("li").id);
+    else openSelectedMovie(e.target.closest("li").id);
+  };
+
   return (
     <ul className='list list-movies list-watched'>
       {data.map((movie) => (
-        <li key={movie.imdbID} onClick={() => setSelectedId(movie.imdbID)}>
+        <li
+          id={movie.imdbID}
+          key={movie.imdbID}
+          onClick={handleClick}
+          className='single-movie'
+        >
           <img src={movie.poster} alt={`${movie.title} poster`} />
           <h3>{movie.title}</h3>
           <div>
@@ -21,6 +34,7 @@ const WatchedMovieList = ({ data, setSelectedId }) => {
               <span>{movie.runtime} min</span>
             </p>
           </div>
+          <button className='btn-delete'>X</button>
         </li>
       ))}
     </ul>

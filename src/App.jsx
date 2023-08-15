@@ -121,7 +121,8 @@ export default function App() {
               <WatchedStats watchedMovies={watchedMovies} />
               <WatchedMovieList
                 data={watchedMovies}
-                setSelectedId={setSelectedId}
+                openSelectedMovie={openSelectedMovie}
+                deleteWatchedMovie={deleteWatchedMovies}
               />
             </>
           )}
