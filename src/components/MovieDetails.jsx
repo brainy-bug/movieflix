@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import StarRating from "./StarRating";
 import Loader from "./Loader";
 
@@ -16,6 +16,8 @@ const MovieDetails = ({
   const [isLoading, setIsLoading] = useState(false);
   const [errorMsg, setErrorMsg] = useState(null);
   const [userRating, setUserRating] = useState(0);
+
+  const counterRef = useRef(0);
 
   const {
     Title: title,
@@ -39,6 +41,7 @@ const MovieDetails = ({
       imdbRating: Number(imdbRating),
       runtime: Number(runtime.split(" ").at(0)),
       userRating,
+      countingRateDecisions: counterRef.current,
     };
 
     addWatchedMovie(newWatchedMovie);
@@ -93,7 +96,6 @@ const MovieDetails = ({
     return () => (document.title = "Home - MovieFlix");
   }, [title]);
 
-
   // Event listener effect
   useEffect(() => {
     document.addEventListener("keydown", handleEscapeKey);
@@ -102,7 +104,11 @@ const MovieDetails = ({
       document.removeEventListener("keydown", handleEscapeKey);
     };
   }, []);
-  
+
+  // Ref effect
+  useEffect(() => {
+    if (userRating) counterRef.current++;
+  }, [userRating]);
 
   return (
     <>

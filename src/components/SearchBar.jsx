@@ -5,8 +5,8 @@ const SearchBar = ({ query, handleQuery }) => {
 
   useEffect(() => {
     const callback = (e) => {
-      if(document.activeElement === inputEl.current) return;
-  
+      if (document.activeElement === inputEl.current) return;
+
       if (e.code === "Enter") inputEl.current.focus();
     };
 

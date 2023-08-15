@@ -69,7 +69,7 @@ export default function App() {
       }
     };
 
-    if (query.length === 0) {
+    if (query.length < 3) {
       setMovies([]);
       setErrorMsg("");
       return;
@@ -98,8 +98,10 @@ export default function App() {
       <div className='main'>
         <Box>
           {isLoading && <Loader />}
-          {!isLoading && !errorMsg && movies.length === 0 && (
-            <p className='msg'>Start searching for your favorite movie 🎬🍿</p>
+          {!isLoading && !errorMsg && query.length < 3 && (
+            <p className='msg'>
+              Enter any 3 keywords to start searching for your favorite movie 🎬
+            </p>
           )}
           {!isLoading && !errorMsg && (
             <MovieList data={movies} openSelectedMovie={openSelectedMovie} />
