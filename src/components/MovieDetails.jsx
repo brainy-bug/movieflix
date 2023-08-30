@@ -4,6 +4,7 @@ import Loader from "./Loader";
 
 import No_Image_Available from "../assets/No_Image_Available.png";
 import ErrorMessage from "./ErrorMessage";
+import useKey from "../hooks/useKey";
 
 const MovieDetails = ({
   id,
@@ -32,6 +33,7 @@ const MovieDetails = ({
     Genre: genre,
   } = movie;
 
+  // Add movie to watched list
   const handleAddWatchedMovie = () => {
     const newWatchedMovie = {
       imdbID: id,
@@ -48,20 +50,22 @@ const MovieDetails = ({
     closeSelectedMovie();
   };
 
+  // Delete movie from watched list
   const delWatchedMovie = () => {
     deleteWatchedMovies(id);
     closeSelectedMovie();
   };
 
-  const handleEscapeKey = (event) => {
-    if (event.key === "Escape") closeSelectedMovie();
-  };
-
+  // Check if movie is already in watched list
   const isWatched = watchedMovies.map((movie) => movie.imdbID).includes(id);
 
+  // Get user rating for watched movie
   const watchedUserRating = watchedMovies.find(
     (movie) => movie.imdbID === id
   )?.userRating;
+
+  // Close movie details on Escape key press
+  useKey("Escape", closeSelectedMovie);
 
   // Data Fetching effect
   useEffect(() => {
@@ -88,7 +92,7 @@ const MovieDetails = ({
     getMovieDetails();
   }, [id]);
 
-  // Document title effect
+  // Page title effect
   useEffect(() => {
     if (!title) return;
     document.title = `${title} - MovieFlix`;
@@ -96,16 +100,7 @@ const MovieDetails = ({
     return () => (document.title = "Home - MovieFlix");
   }, [title]);
 
-  // Event listener effect
-  useEffect(() => {
-    document.addEventListener("keydown", handleEscapeKey);
-
-    return () => {
-      document.removeEventListener("keydown", handleEscapeKey);
-    };
-  }, []);
-
-  // Ref effect
+  // User rating effect
   useEffect(() => {
     if (userRating) counterRef.current++;
   }, [userRating]);

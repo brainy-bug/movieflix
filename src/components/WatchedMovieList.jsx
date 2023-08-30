@@ -1,7 +1,6 @@
-import React, { useEffect, useRef } from "react";
+import React from "react";
 
 const WatchedMovieList = ({ data, openSelectedMovie, deleteWatchedMovie }) => {
-  const movieEl = useRef(null);
 
   const handleClick = (e) => {
     if (e.target.className === "btn-delete")

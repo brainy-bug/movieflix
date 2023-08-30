@@ -1,19 +1,16 @@
 import React, { useRef, useEffect } from "react";
+import useKey from "../hooks/useKey";
 
-const SearchBar = ({ query, handleQuery }) => {
+const SearchBar = ({ query, setQuery }) => {
   const inputEl = useRef(null);
 
-  useEffect(() => {
-    const callback = (e) => {
-      if (document.activeElement === inputEl.current) return;
+  const callback = () => {
+    if (document.activeElement === inputEl.current) return;
+    inputEl.current.focus();
+    setQuery("");
+  };
 
-      if (e.code === "Enter") inputEl.current.focus();
-    };
-
-    document.addEventListener("keydown", callback);
-
-    return () => document.removeEventListener("keydown", callback);
-  }, []);
+  useKey("Enter", callback);
 
   return (
     <input
@@ -21,7 +18,7 @@ const SearchBar = ({ query, handleQuery }) => {
       type='text'
       placeholder='Search movies...'
       value={query}
-      onChange={handleQuery}
+      onChange={(e) => setQuery(e.target.value)}
       ref={inputEl}
     />
   );
